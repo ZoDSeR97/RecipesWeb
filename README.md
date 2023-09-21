@@ -11,6 +11,16 @@ $ dotnet --version
 $ dotnet tool install --global dotnet-ef # This install entity framework globally
 ```
 
+## :Computer: Front-end ##
+- Blazor
+- Tailwindcss
+- Bootstrap
+
+## :: Back-end ##
+- MySQL
+- Entity Framework
+- ASP.Net
+
 ## :checkered_flag: How to run ##
 Go to appsetting.json edit connection to your MySQL DB
 ```json
