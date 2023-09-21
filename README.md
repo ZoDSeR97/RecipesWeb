@@ -11,12 +11,12 @@ $ dotnet --version
 $ dotnet tool install --global dotnet-ef # This install entity framework globally
 ```
 
-## :Computer: Front-end ##
+## 🖥️: Front-end ##
 - Blazor
 - Tailwindcss
 - Bootstrap
 
-## :: Back-end ##
+## 📠: Back-end ##
 - MySQL
 - Entity Framework
 - ASP.Net
