@@ -10,6 +10,10 @@ namespace RecipesWeb.Shared
 {
     public class HasIngredients
     {
+        public int IngredientId { get; set; }
+        public int RecipeId { get; set; }
         //Navigation Properties
+        public Recipes? Recipe { get; set; }
+        public Ingredients? Ingredient { get; set; }
     }
 }
