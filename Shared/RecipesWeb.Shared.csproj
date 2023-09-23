@@ -9,4 +9,13 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Model1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Model1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
 </Project>
