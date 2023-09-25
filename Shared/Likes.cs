@@ -10,6 +10,9 @@ namespace RecipesWeb.Shared
 {
     public class Likes
     {
+        [Key]
+        public int Id { get; set; }
+
         public int UserId { get; set; }
         public int RecipesId { get; set; }
 

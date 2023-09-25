@@ -14,9 +14,9 @@ namespace RecipesWeb.Server.Models
         // The name of our table in our database will be based on the name we provide here
         // This is where we provide a plural version of our model to fit table naming standards    
         public DbSet<Users> Users { get; set; }
-        public DbSet<Recipes> Recipe {  get; set; }
-        public DbSet<Likes> Liked { get; set; }
-        public DbSet<HasIngredients> HasIngredient { get; set; }
-        public DbSet<Ingredients> Ingredient { get; set; }
+        public DbSet<Recipes> Recipes {  get; set; }
+        public DbSet<Likes> Likes { get; set; }
+        public DbSet<HasIngredients> HasIngredients { get; set; }
+        public DbSet<Ingredients> Ingredients { get; set; }
     }
 }
