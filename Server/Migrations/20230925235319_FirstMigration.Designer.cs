@@ -11,7 +11,7 @@ using RecipesWeb.Server.Models;
 namespace RecipesWeb.Server.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230925005712_FirstMigration")]
+    [Migration("20230925235319_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -94,6 +94,9 @@ namespace RecipesWeb.Server.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Instruction")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -105,12 +108,9 @@ namespace RecipesWeb.Server.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("UsersId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Recipes");
                 });
@@ -154,13 +154,13 @@ namespace RecipesWeb.Server.Migrations
             modelBuilder.Entity("RecipesWeb.Shared.HasIngredients", b =>
                 {
                     b.HasOne("RecipesWeb.Shared.Ingredients", "Ingredient")
-                        .WithMany()
+                        .WithMany("InRecipe")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RecipesWeb.Shared.Recipes", "Recipe")
-                        .WithMany()
+                        .WithMany("HasIngredient")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,7 +173,7 @@ namespace RecipesWeb.Server.Migrations
             modelBuilder.Entity("RecipesWeb.Shared.Likes", b =>
                 {
                     b.HasOne("RecipesWeb.Shared.Recipes", "Recipe")
-                        .WithMany()
+                        .WithMany("LikeBy")
                         .HasForeignKey("RecipesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -191,9 +191,23 @@ namespace RecipesWeb.Server.Migrations
 
             modelBuilder.Entity("RecipesWeb.Shared.Recipes", b =>
                 {
-                    b.HasOne("RecipesWeb.Shared.Users", null)
+                    b.HasOne("RecipesWeb.Shared.Users", "Creator")
                         .WithMany("Recipes")
-                        .HasForeignKey("UsersId");
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("RecipesWeb.Shared.Ingredients", b =>
+                {
+                    b.Navigation("InRecipe");
+                });
+
+            modelBuilder.Entity("RecipesWeb.Shared.Recipes", b =>
+                {
+                    b.Navigation("HasIngredient");
+
+                    b.Navigation("LikeBy");
                 });
 
             modelBuilder.Entity("RecipesWeb.Shared.Users", b =>

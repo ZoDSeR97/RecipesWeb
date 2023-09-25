@@ -1,4 +1,8 @@
-﻿@page "/"
+﻿@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Nav
+@using RecipesWeb.Shared
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
@@ -6,6 +10,27 @@
 
 Welcome to your new app.
 
-<Counter/>
+<EditForm Model="Query" OnValidSubmit="HandleSearch">
+    <div class="form-floating mb-3">
+        <InputText type="text" class="form-control" placeholder="Recipe Name or Ingredient" @bind-Value="Query.Name" />
+        <label for="Name" class="form-label">Recipe Name or Ingredient</label>
+        <ValidationMessage For="@(()=>Query.Name)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+    private SearchName Query = new SearchName();
+
+    public async void HandleSearch()
+    {
+        var response = await Http.PostAsJsonAsync("api/Recipe", Query);
+        Console.WriteLine(response.IsSuccessStatusCode);
+        if (response.IsSuccessStatusCode)
+        {
+            Nav.NavigateTo("/");
+        }
+    }
+}

@@ -68,14 +68,14 @@ namespace RecipesWeb.Server.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: true)
+                    CreatorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recipes_Users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_Recipes_Users_CreatorId",
+                        column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 })
@@ -156,9 +156,9 @@ namespace RecipesWeb.Server.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Recipes_UsersId",
+                name: "IX_Recipes_CreatorId",
                 table: "Recipes",
-                column: "UsersId");
+                column: "CreatorId");
         }
 
         /// <inheritdoc />

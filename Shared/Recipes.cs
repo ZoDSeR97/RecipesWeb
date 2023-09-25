@@ -26,5 +26,8 @@ namespace RecipesWeb.Shared
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
         //Navigation Properties
+        public List<HasIngredients> HasIngredient { get; set;} = new List<HasIngredients>();
+        public Users? Creator { get; set; }
+        public List<Likes> LikeBy { get; set; } = new List<Likes>();
     }
 }
