@@ -42,5 +42,6 @@ Now use these commands in terminal
 ```bash
 $ cd folder_name # cd into folder directory where .cs files are
 $ dotnet restore # Restore the dependencies and tools of a project
+$ dotnet ef database update
 $ dotnet run
 ```
