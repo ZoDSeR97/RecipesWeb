@@ -508,6 +508,17 @@ video {
 .ps-3 {
   padding-inline-start: 0.75rem;
 }
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
 .font-bold {
   font-weight: 700;
+}
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.no-underline {
+  text-decoration-line: none;
 }
