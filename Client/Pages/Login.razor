@@ -1,6 +1,42 @@
-﻿@page "/login"
+﻿@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+@using RecipesWeb.Shared
+@page "/login"
+
 <h3>Login</h3>
+<EditForm Model="user" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <div class="form-floating mb-3">
+        <InputText type="email" class="form-control" placeholder="name@example.com" aria-describedby="emailHelp" @bind-Value="user.Email" />
+        <label for="Email1" class="form-label">Email address</label>
+        <ValidationMessage For="@(()=>user.Email)" />
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" class="form-control" placeholder="WoWLeaked" @bind-Value="user.Password" />
+        <label for="Password1" class="form-label">Password</label>
+        <ValidationMessage For="@(()=>user.Password)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+<p>Don't have an Account? <a class="btn btn-success" href="register">Register Here!</a></p>
 
 @code {
+    private LoginUser user = new LoginUser();
+    Users LoginUser = new Users();
 
+    public async void HandleLogin()
+    {
+        var response = await Http.PostAsJsonAsync("api/User", user);
+        Console.WriteLine(response.IsSuccessStatusCode);
+        if (response.IsSuccessStatusCode)
+        {
+            LoginUser = await response.Content.ReadFromJsonAsync<Users>();
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", (int)LoginUser.Id);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            Nav.NavigateTo("/");
+        }
+    }
 }
