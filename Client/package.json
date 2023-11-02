@@ -3,9 +3,9 @@
   "description": "Recipe Blazor Web with tailwindcss",
   "devDependencies": {
     "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.30",
-    "tailwindcss": "^3.3.3",
-    "postcss-cli": "^10.1.0"
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.3.5"
   },
   "license": "LGPL-3.0-or-later",
   "main": "index.js",
