@@ -8,15 +8,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecipesWeb.Shared
 {
-    public class HasIngredients
+    public class Like
     {
         [Key]
         public int Id { get; set; }
 
-        public int IngredientId { get; set; }
-        public int RecipeId { get; set; }
+        public int UserId { get; set; }
+        public int RecipesId { get; set; }
+
         //Navigation Properties
-        public Recipes? Recipe { get; set; }
-        public Ingredients? Ingredient { get; set; }
+        public User? User { get; set; }
+        public Recipe? Recipe {  get; set; } 
     }
 }

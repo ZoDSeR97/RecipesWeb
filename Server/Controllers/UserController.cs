@@ -1,83 +1,89 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using RecipesWeb.Shared;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using RecipesWeb.Server.Models;
+using Microsoft.AspNetCore.Authorization;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RecipesWeb.Server.Controllers
 {
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        // GET: UserController
-        public ActionResult Index()
+        MyContext _context;
+        private readonly IConfiguration _configuration;
+        //private readonly IUserService _userService;
+
+        public UserController(MyContext context, IConfiguration configuration /*, IUserService userService*/)
         {
-            return View();
+            _context = context;
+            _configuration = configuration;
+            //_userService = userService;
         }
 
-        // GET: UserController/Details/5
-        public ActionResult Details(int id)
+        // GET: api/<UserController>
+        [HttpGet]
+        public IEnumerable<string> Get()
         {
-            return View();
+            return new string[] { "value1", "value2" };
         }
 
-        // GET: UserController/Create
-        public ActionResult Create()
+        // GET api/<UserController>/5
+        [HttpGet("{id}"), Authorize(Roles = "Admin")]
+        public string Get(int id)
         {
-            return View();
-        }
-
-        // POST: UserController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+            User? user = _context.Users.FirstOrDefault(record=>record.Id==id);
+            if (user != null) {
+                string Token = CreateToken(user);
+                return Token;
             }
-            catch
-            {
-                return View();
-            }
+            return "Mama just kill a man";
         }
 
-        // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
+        // POST api/<UserController>
+        [HttpPost, Authorize(Roles = "User")]
+        public void Post([FromBody] string value)
         {
-            return View();
         }
 
-        // POST: UserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // PUT api/<UserController>/5
+        [HttpPut("{id}"), Authorize(Roles = "User")]
+        public void Put(int id, [FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        // DELETE api/<UserController>/5
+        [HttpDelete("{id}"), Authorize(Roles = "User")]
+        public void Delete(int id)
         {
-            return View();
         }
 
-        // POST: UserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        private string CreateToken(User user)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            List<Claim> claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Role, "User"),
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value!));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(2),
+                    signingCredentials: creds
+                );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
     }
 }

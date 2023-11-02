@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RecipesWeb.Shared;
 
 namespace RecipesWeb.Server.Models
@@ -13,10 +12,10 @@ namespace RecipesWeb.Server.Models
         // We need to create a new DbSet<Model> for every model in our project that is making a table
         // The name of our table in our database will be based on the name we provide here
         // This is where we provide a plural version of our model to fit table naming standards    
-        public DbSet<Users> Users { get; set; }
-        public DbSet<Recipes> Recipes {  get; set; }
-        public DbSet<Likes> Likes { get; set; }
-        public DbSet<HasIngredients> HasIngredients { get; set; }
-        public DbSet<Ingredients> Ingredients { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Recipe> Recipes {  get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<HasIngredient> HasIngredients { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
     }
 }

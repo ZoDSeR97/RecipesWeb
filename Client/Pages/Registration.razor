@@ -38,7 +38,7 @@
 
 @code {
     bool emailInUse = false;
-    Users user = new Users();
+    User user = new User();
 
     public async void HandleSubmit()
     {
@@ -47,7 +47,7 @@
         Console.WriteLine(response.IsSuccessStatusCode);
         if (response.IsSuccessStatusCode)
         {
-            Users LoginUser = await response.Content.ReadFromJsonAsync<Users>();
+            User LoginUser = await response.Content.ReadFromJsonAsync<User>();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", LoginUser.Id);
             await AuthStateProvider.GetAuthenticationStateAsync();
             Nav.NavigateTo("/");

@@ -25,7 +25,7 @@
 
 @code {
     private LoginUser user = new LoginUser();
-    Users LoginUser = new Users();
+    User LoginUser = new User();
 
     public async void HandleLogin()
     {
@@ -33,7 +33,7 @@
         Console.WriteLine(response.IsSuccessStatusCode);
         if (response.IsSuccessStatusCode)
         {
-            LoginUser = await response.Content.ReadFromJsonAsync<Users>();
+            LoginUser = await response.Content.ReadFromJsonAsync<User>();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "User", (int)LoginUser.Id);
             await AuthStateProvider.GetAuthenticationStateAsync();
             Nav.NavigateTo("/");

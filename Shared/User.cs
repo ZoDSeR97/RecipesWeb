@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecipesWeb.Shared
 {
-    public class Users
+    public class User
     {
         [Required]
         [Key]
@@ -42,7 +42,7 @@ namespace RecipesWeb.Shared
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
         //Navigation Properties
-        public List<Recipes> Recipes { get; set; } = new List<Recipes>();
-        public List<Likes> LikedRecipes { get; set; } = new List<Likes>();
+        public List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        public List<Like> LikedRecipes { get; set; } = new List<Like>();
     }
 }

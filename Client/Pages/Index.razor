@@ -18,19 +18,34 @@ Welcome to your new app.
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
+@{
+    foreach (Recipe result in results)
+    {
+        
+    }
+}
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code{
     private SearchName Query = new SearchName();
+    private List<Recipe> results = new List<Recipe>();
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+        var response = await Http.GetFromJsonAsync<Recipe[]>("api/Recipe");
+        if(response != null)
+            results = response.ToList();
+    }
 
     public async void HandleSearch()
     {
-        var response = await Http.PostAsJsonAsync("api/Recipe", Query);
-        Console.WriteLine(response.IsSuccessStatusCode);
-        if (response.IsSuccessStatusCode)
-        {
-            Nav.NavigateTo("/");
-        }
+        var findRecipe = await Http.GetFromJsonAsync<Recipe[]>($"api/Recipe/{Query.Name}");
+        var findRecipeWithIngredient = await Http.GetFromJsonAsync<Recipe[]>($"api/Ingredient/{Query.Name}");
+        if (findRecipe != null)
+            results = findRecipe.ToList();
+        if (findRecipeWithIngredient != null)
+            findRecipeWithIngredient.ToList().ForEach(recipe => results.Add(recipe));
     }
 }
