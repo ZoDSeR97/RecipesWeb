@@ -18,11 +18,38 @@ Welcome to your new app.
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
-@{
-    foreach (Recipe result in results)
-    {
-        
-    }
+
+@if (results == null)
+{
+    <p>Loading recipes...</p>
+}
+else
+{
+    <div className="grid grid-cols-3 gap-4">
+        @{
+            foreach (Recipe result in results)
+            {
+                <div className="flex flex-col bg-white relative cursor-pointer" @onClick="">
+                    <img src={recipe.Image} />
+                    <div className="flex items-center gap-1">
+                        <AuthorizeView>
+                            <Authorized>
+                                <span @onClick="@(()=>Nav.NavigateTo("/"))">
+
+                                </span>
+                            </Authorized>
+                            <NotAuthorized>
+                                <span @onClick="@(()=>Nav.NavigateTo("/login"))">
+
+                                </span>
+                            </NotAuthorized>
+                        </AuthorizeView>
+                        <h3>{recipe.Name}</h3>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 }
 
 <SurveyPrompt Title="How is Blazor working for you?" />
