@@ -2,22 +2,14 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Nav
 @using RecipesWeb.Shared
+@using RecipesWeb.Client.Components
 @page "/"
 
 <PageTitle>Index</PageTitle>
 
-<h1 class="font-bold">Hello, world!</h1>
+Welcome to Recipe Web App.
 
-Welcome to your new app.
-
-<EditForm Model="Query" OnValidSubmit="HandleSearch">
-    <div class="form-floating mb-3">
-        <InputText type="text" class="form-control" placeholder="Recipe Name or Ingredient" @bind-Value="Query.Name" />
-        <label for="Name" class="form-label">Recipe Name or Ingredient</label>
-        <ValidationMessage For="@(()=>Query.Name)" />
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+<SearchBar OnSearch="HandleSearch"/>
 
 @if (results == null)
 {
@@ -29,24 +21,7 @@ else
         @{
             foreach (Recipe result in results)
             {
-                <div className="flex flex-col bg-white relative cursor-pointer" @onClick="">
-                    <img src={recipe.Image} />
-                    <div className="flex items-center gap-1">
-                        <AuthorizeView>
-                            <Authorized>
-                                <span @onClick="@(()=>Nav.NavigateTo("/"))">
-
-                                </span>
-                            </Authorized>
-                            <NotAuthorized>
-                                <span @onClick="@(()=>Nav.NavigateTo("/login"))">
-
-                                </span>
-                            </NotAuthorized>
-                        </AuthorizeView>
-                        <h3>{recipe.Name}</h3>
-                    </div>
-                </div>
+                <Card recipe="result"/>
             }
         }
     </div>
@@ -55,24 +30,19 @@ else
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code{
-    private SearchName Query = new SearchName();
-    private List<Recipe> results = new List<Recipe>();
+    private List<Recipe>? results;
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        var response = await Http.GetFromJsonAsync<Recipe[]>("api/Recipe");
-        if(response != null)
-            results = response.ToList();
+        results = await Http.GetFromJsonAsync<List<Recipe>>("api/Recipe") ?? new List<Recipe>();
+        await base.OnInitializedAsync();
     }
 
-    public async void HandleSearch()
+    public async void HandleSearch(string query)
     {
-        var findRecipe = await Http.GetFromJsonAsync<Recipe[]>($"api/Recipe/{Query.Name}");
-        var findRecipeWithIngredient = await Http.GetFromJsonAsync<Recipe[]>($"api/Ingredient/{Query.Name}");
+        results = new List<Recipe>();
+        var findRecipe = await Http.GetFromJsonAsync<List<Recipe>>($"api/Recipe/{query}");
         if (findRecipe != null)
-            results = findRecipe.ToList();
-        if (findRecipeWithIngredient != null)
-            findRecipeWithIngredient.ToList().ForEach(recipe => results.Add(recipe));
+            results.AddRange(findRecipe);
     }
 }

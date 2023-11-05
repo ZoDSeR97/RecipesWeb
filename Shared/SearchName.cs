@@ -10,7 +10,7 @@ namespace RecipesWeb.Shared
     public class SearchName
     {
         [Required]
-        [MinLength(2)]
-        public string? Name { get; set; }
+        [MinLength(2, ErrorMessage = "Name must be more than 2 characters")]
+        public string Name { get; set; } = string.Empty;
     }
 }

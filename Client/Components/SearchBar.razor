@@ -1,0 +1,21 @@
+﻿@using RecipesWeb.Shared
+@inject HttpClient Http
+
+<EditForm Model="Query" OnValidSubmit="OnSearchClicked">
+    <DataAnnotationsValidator />
+    <div class="form-floating mb-3">
+        <InputText type="text" class="form-control" placeholder="Recipe Name or Ingredient" @bind-Value="Query.Name" />
+        <label for="Name" class="form-label">Recipe Name or Ingredient</label>
+        <ValidationMessage For="@(()=>Query.Name)" />
+    </div>
+    <button type="submit" class="btn btn-primary btn-outline-primary">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    protected SearchName Query = new SearchName();
+
+    private async Task OnSearchClicked() => await OnSearch.InvokeAsync(Query.Name);
+}

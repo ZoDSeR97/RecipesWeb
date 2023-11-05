@@ -1,0 +1,31 @@
+﻿@using RecipesWeb.Shared
+@inject NavigationManager Nav
+
+<div className="flex flex-col bg-white relative cursor-pointer" @onClick="">
+    <img src={recipe.Image} />
+    <div className="flex items-center gap-1">
+        <AuthorizeView>
+            <Authorized>
+                <span @onClick="@(()=>Nav.NavigateTo("/"))">
+
+                </span>
+            </Authorized>
+            <NotAuthorized>
+                <span @onClick="@(()=>Nav.NavigateTo("/login"))">
+
+                </span>
+            </NotAuthorized>
+        </AuthorizeView>
+        <h3>{recipe.Name}</h3>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Recipe? recipe { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        ArgumentNullException.ThrowIfNull(recipe);
+    }
+}

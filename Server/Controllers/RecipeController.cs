@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RecipesWeb.Server.Models;
+using RecipesWeb.Shared;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +11,33 @@ namespace RecipesWeb.Server.Controllers
     [ApiController]
     public class RecipeController : ControllerBase
     {
+        MyContext _context;
+
+        public RecipeController(MyContext context)
+        {
+            _context = context;
+        }
+
         // GET: api/<RecipeController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Recipe> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Recipes
+                .Include(record => record.Creator)
+                .Include(record => record.LikeBy)
+                .Include(record => record.HasIngredient).ThenInclude(record => record.Ingredient).ToList();
         }
 
         // GET api/<RecipeController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{name}")]
+        public IEnumerable<Recipe> Get(string name)
         {
-            return "value";
+            return _context.Recipes
+                .Include(record => record.Creator)
+                .Include(record => record.LikeBy)
+                .Include(record => record.HasIngredient).ThenInclude(record => record.Ingredient)
+                .Where(record => record.Name == name || record.HasIngredient.Any(i => i.Ingredient.Name == name))
+                .ToList();
         }
 
         // POST api/<RecipeController>
